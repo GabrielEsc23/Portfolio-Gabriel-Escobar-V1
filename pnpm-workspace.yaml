@@ -1,2 +1,5 @@
 allowBuilds:
   esbuild: true
+  sharp: true
+  "@img/sharp-linux-x64": true
+  "@img/sharp-linux-arm64": true

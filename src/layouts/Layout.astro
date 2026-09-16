@@ -12,6 +12,11 @@ import "@fontsource/newsreader/400.css";
 import "@fontsource/newsreader/700.css";
 import "@fontsource/newsreader/400-italic.css";
 
+// Preload URLs para fuentes críticas de portada (elimina la latencia de 1.7s y el CLS restante)
+import cinzel900 from "@fontsource/cinzel/files/cinzel-latin-900-normal.woff2?url";
+import playfair900 from "@fontsource/playfair-display/files/playfair-display-latin-900-normal.woff2?url";
+import newsreader400 from "@fontsource/newsreader/files/newsreader-latin-400-normal.woff2?url";
+
 const {
   title = "Gabriel Escobar | The Developer Gazette",
   description = "Portafolio Profesional de Desarrollo de Software • Tecnólogo en Software (EPN)"
@@ -24,6 +29,11 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preload de fuentes críticas de portada para descarga inmediata en paralelo -->
+    <link rel="preload" href={cinzel900} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={playfair900} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={newsreader400} as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>
     <meta name="description" content={description} />
