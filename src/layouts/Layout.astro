@@ -3,6 +3,15 @@
 import EditorialNavbar from "../components/EditorialNavbar.astro";
 import NewspaperDesk from "../components/NewspaperDesk.astro";
 
+// Tipografías autoalojadas para máximo rendimiento (cero bloqueos y cero peticiones externas)
+import "@fontsource/cinzel/700.css";
+import "@fontsource/cinzel/900.css";
+import "@fontsource/playfair-display/700.css";
+import "@fontsource/playfair-display/900.css";
+import "@fontsource/newsreader/400.css";
+import "@fontsource/newsreader/700.css";
+import "@fontsource/newsreader/400-italic.css";
+
 const {
   title = "Gabriel Escobar | The Developer Gazette",
   description = "Portafolio Profesional de Desarrollo de Software • Tecnólogo en Software (EPN)"
@@ -15,14 +24,6 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- Google Fonts para tipografía de prensa clásica -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&family=Playfair+Display:wght@700;900&display=swap"
-      rel="stylesheet"
-    />
 
     <title>{title}</title>
     <meta name="description" content={description} />

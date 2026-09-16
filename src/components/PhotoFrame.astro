@@ -52,13 +52,14 @@ const resolvedImage = image || autoFoundImage;
           alt={alt}
           width={320}
           height={384}
-          widths={[300, 320, 480, 640]}
-          sizes="(max-width: 640px) 300px, 320px"
+          widths={[280, 320, 480, 600]}
+          sizes="(max-width: 480px) 280px, (max-width: 640px) 320px, 320px"
           format="webp"
-          quality={80}
+          quality={68}
           class="vintage-photo"
           loading="eager"
           fetchpriority="high"
+          decoding="async"
         />
       )
     ) : (

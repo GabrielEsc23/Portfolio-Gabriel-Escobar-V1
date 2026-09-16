@@ -74,6 +74,10 @@
         if (!el.dataset.originalText) {
           el.dataset.originalText = el.textContent || "";
         }
+        // Reservar la altura del elemento para evitar el salto de diseño (CLS = 0)
+        if (!el.style.minHeight && el.offsetHeight > 0) {
+          el.style.minHeight = `${el.offsetHeight}px`;
+        }
         el.textContent = "";
       });
 
@@ -101,7 +105,10 @@
               clearInterval((el as any).__typeInterval);
               setTimeout(() => {
                 cursor.style.opacity = "0";
-                setTimeout(() => cursor.remove(), 400);
+                setTimeout(() => {
+                  cursor.remove();
+                  el.style.minHeight = "";
+                }, 400);
               }, 1600);
             }
           }, speed);
