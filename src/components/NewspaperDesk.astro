@@ -1,0 +1,245 @@
+---
+// src/components/NewspaperDesk.astro
+---
+
+<div class="newspaper-desk-container">
+  <!-- PISTA CENTRAL DE PLIEGOS DE PRENSA -->
+  <main class="newspaper-desk-stage" id="newspaper-desk-stage" role="main" aria-label="Escritorio de Prensa">
+    <slot />
+  </main>
+</div>
+
+<style>
+  .newspaper-desk-container {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #f2ebd9;
+    background-image:
+      radial-gradient(ellipse at 50% 15%, #faf6eb 0%, #ece1ca 100%),
+      repeating-linear-gradient(
+        45deg,
+        rgba(100, 80, 50, 0.015) 0px,
+        rgba(100, 80, 50, 0.015) 1px,
+        transparent 1px,
+        transparent 6px
+      );
+    background-attachment: fixed;
+    overflow-x: hidden;
+    padding: 8px 6px 36px 6px;
+  }
+
+  /* Escenario central donde descansan y rotan los pliegos */
+  .newspaper-desk-stage {
+    position: relative;
+    width: min(1180px, 96vw);
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    perspective: 1600px;
+    margin: 0 auto;
+  }
+</style>
+
+<script>
+  // CONTROLADOR DE PASO DE HOJAS FLUIDO + EFECTO MÁQUINA DE ESCRIBIR (TYPEWRITER)
+  function initNewspaperExperience() {
+    if ((window as any).__newspaperExpInitialized) return;
+
+    const stage = document.getElementById("newspaper-desk-stage");
+    if (!stage) return;
+
+    (window as any).__newspaperExpInitialized = true;
+
+    const pages = Array.from(stage.querySelectorAll<HTMLElement>(".newspaper-page-sheet"));
+    if (!pages.length) return;
+
+    let currentPageIndex = 0;
+    let isTransitioning = false;
+
+    // A. MOTOR DE EFECTO MÁQUINA DE ESCRIBIR (TYPEWRITER)
+    function runTypewriterOnPage(pageEl: HTMLElement) {
+      const typeElements = Array.from(pageEl.querySelectorAll<HTMLElement>("[data-typewriter]"));
+      if (!typeElements.length) return;
+
+      // Limpiar temporizadores previos
+      typeElements.forEach((el) => {
+        if ((el as any).__typeTimeout) clearTimeout((el as any).__typeTimeout);
+        if ((el as any).__typeInterval) clearInterval((el as any).__typeInterval);
+
+        if (!el.dataset.originalText) {
+          el.dataset.originalText = el.textContent || "";
+        }
+        el.textContent = "";
+      });
+
+      let delayAccumulator = 60;
+
+      typeElements.forEach((el) => {
+        const fullText = el.dataset.originalText || "";
+        const speed = parseInt(el.dataset.typeSpeed || "26", 10);
+
+        (el as any).__typeTimeout = setTimeout(() => {
+          let charIdx = 0;
+          el.textContent = "";
+
+          // Cursor de máquina de escribir vintage
+          const cursor = document.createElement("span");
+          cursor.className = "typewriter-cursor";
+          cursor.textContent = "▌";
+          el.appendChild(cursor);
+
+          (el as any).__typeInterval = setInterval(() => {
+            if (charIdx < fullText.length) {
+              cursor.before(fullText.charAt(charIdx));
+              charIdx++;
+            } else {
+              clearInterval((el as any).__typeInterval);
+              setTimeout(() => {
+                cursor.style.opacity = "0";
+                setTimeout(() => cursor.remove(), 400);
+              }, 1600);
+            }
+          }, speed);
+        }, delayAccumulator);
+
+        // El siguiente elemento comienza fluidamente
+        delayAccumulator += Math.min(fullText.length * speed * 0.75 + 100, 1400);
+      });
+    }
+
+    // B. MOTOR DE TRANSICIÓN DE OPACIDAD (PRIMERA VEZ QUE SE VE LA PÁGINA)
+    const visitedPages = new Set<number>();
+
+    function triggerFirstViewFadeIn(pageEl: HTMLElement, pageIdx: number) {
+      if (visitedPages.has(pageIdx)) return;
+      visitedPages.add(pageIdx);
+
+      const fadeItems = Array.from(pageEl.querySelectorAll<HTMLElement>(".newspaper-fade-item"));
+      fadeItems.forEach((item, i) => {
+        item.style.animationDelay = `${Math.min(i * 65 + 40, 500)}ms`;
+      });
+
+      pageEl.classList.add("page-first-visited");
+    }
+
+    // C. INICIALIZAR HOJAS
+    function setupSheets() {
+      pages.forEach((page, idx) => {
+        page.classList.remove(
+          "sheet-active",
+          "sheet-queued",
+          "sheet-hidden-left",
+          "sheet-hidden-right",
+          "sheet-slide-out-left",
+          "sheet-slide-out-right",
+          "sheet-slide-in-left",
+          "sheet-slide-in-right"
+        );
+        if (idx === 0) {
+          page.classList.add("sheet-active");
+        } else {
+          page.classList.add("sheet-hidden-right");
+        }
+      });
+
+      // Ejecutar animación de escritura y transición de opacidad en la primera hoja
+      const firstPage = pages[0];
+      if (firstPage) {
+        triggerFirstViewFadeIn(firstPage, 0);
+        runTypewriterOnPage(firstPage);
+      }
+    }
+
+    // D. CAMBIO DE HOJA SIMPLE Y FLUIDO
+    function goToPage(targetIdx: number) {
+      if (isTransitioning || targetIdx === currentPageIndex || targetIdx < 0 || targetIdx >= pages.length) return;
+
+      isTransitioning = true;
+      const isGoingForward = targetIdx > currentPageIndex;
+      const currentSheet = pages[currentPageIndex];
+      const targetSheet = pages[targetIdx];
+
+      if (!currentSheet || !targetSheet) {
+        isTransitioning = false;
+        return;
+      }
+
+      // Preparar hoja saliente
+      currentSheet.classList.remove("sheet-active", "sheet-hidden-left", "sheet-hidden-right");
+      if (isGoingForward) {
+        currentSheet.classList.add("sheet-slide-out-left");
+      } else {
+        currentSheet.classList.add("sheet-slide-out-right");
+      }
+
+      // Preparar hoja entrante
+      targetSheet.classList.remove("sheet-hidden-left", "sheet-hidden-right", "sheet-queued");
+      targetSheet.scrollTop = 0;
+      if (isGoingForward) {
+        targetSheet.classList.add("sheet-slide-in-right");
+      } else {
+        targetSheet.classList.add("sheet-slide-in-left");
+      }
+
+      // Al completar transición (420ms)
+      setTimeout(() => {
+        currentSheet.classList.remove("sheet-slide-out-left", "sheet-slide-out-right");
+        if (isGoingForward) {
+          currentSheet.classList.add("sheet-hidden-left");
+        } else {
+          currentSheet.classList.add("sheet-hidden-right");
+        }
+
+        targetSheet.classList.remove("sheet-slide-in-left", "sheet-slide-in-right");
+        targetSheet.classList.add("sheet-active");
+
+        currentPageIndex = targetIdx;
+        isTransitioning = false;
+
+        // Disparar transición de opacidad la primera vez que se ve esta página
+        triggerFirstViewFadeIn(targetSheet, targetIdx);
+
+        // Disparar máquina de escribir en la nueva hoja
+        runTypewriterOnPage(targetSheet);
+      }, 420);
+    }
+
+    // D. GESTIÓN DE EVENTOS
+    document.addEventListener("click", (e) => {
+      const target = (e.target as HTMLElement)?.closest("[data-newspaper-goto]");
+      if (target) {
+        e.preventDefault();
+        const targetPageNum = parseInt(target.getAttribute("data-newspaper-goto") || "1", 10) - 1;
+        goToPage(targetPageNum);
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        if (currentPageIndex < pages.length - 1) {
+          goToPage(currentPageIndex + 1);
+        }
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        if (currentPageIndex > 0) {
+          goToPage(currentPageIndex - 1);
+        }
+      }
+    });
+
+    // Iniciar
+    setupSheets();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initNewspaperExperience, { once: true });
+  } else {
+    initNewspaperExperience();
+  }
+</script>

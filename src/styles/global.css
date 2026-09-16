@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: "Newsreader", "Times New Roman", Times, serif;
+    --font-headline: "Playfair Display", "Georgia", serif;
+    --font-masthead: "Cinzel", "Playfair Display", serif;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    color: #1c1815;
+    background-color: #f3ecdb;
+  }
+}
+
+/* Bordes dobles clásicos de periódico */
+.border-newspaper-double {
+  border-top: 3px double #2c2520;
+  border-bottom: 3px double #2c2520;
+}
+
+.border-newspaper-rule {
+  border-bottom: 1px solid rgba(44, 37, 32, 0.4);
+}
+
+.font-headline {
+  font-family: var(--font-headline);
+}
+
+.font-masthead {
+  font-family: var(--font-masthead);
+}
+
+/* Transición de opacidad progresiva en la primera visualización de cada página */
+.newspaper-fade-item {
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: opacity, transform;
+}
+
+.newspaper-page-sheet.page-first-visited .newspaper-fade-item {
+  animation: newspaperFadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes newspaperFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newspaper-fade-item {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}

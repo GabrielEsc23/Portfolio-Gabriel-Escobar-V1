@@ -1,0 +1,33 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+import NewspaperPage from "../components/NewspaperPage.astro";
+import FrontPage from "../components/pages/FrontPage.astro";
+import ProjectsPage from "../components/pages/ProjectsPage.astro";
+import SkillsPage from "../components/pages/SkillsPage.astro";
+import ContactPage from "../components/pages/ContactPage.astro";
+import { cvData } from "../data/cv";
+import "../styles/global.css";
+---
+
+<Layout title={`${cvData.perfil.nombre} | The Developer Gazette`}>
+  <!-- Página 1: Portada y Perfil Profesional -->
+  <NewspaperPage pageNumber={1} totalPages={4} sectionName="Portada y Perfil">
+    <FrontPage perfil={cvData.perfil} ingles={cvData.ingles} />
+  </NewspaperPage>
+
+  <!-- Página 2: Gaceta de Proyectos -->
+  <NewspaperPage pageNumber={2} totalPages={4} sectionName="Proyectos">
+    <ProjectsPage proyectos={cvData.proyectos} githubUrl={cvData.perfil.github} />
+  </NewspaperPage>
+
+  <!-- Página 3: Habilidades Técnicas -->
+  <NewspaperPage pageNumber={3} totalPages={4} sectionName="Habilidades Técnicas">
+    <SkillsPage habilidades={cvData.habilidades} />
+  </NewspaperPage>
+
+  <!-- Página 4: Contacto Directo -->
+  <NewspaperPage pageNumber={4} totalPages={4} sectionName="Contacto">
+    <ContactPage />
+  </NewspaperPage>
+</Layout>

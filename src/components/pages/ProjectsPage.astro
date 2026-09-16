@@ -1,0 +1,304 @@
+---
+// src/components/pages/ProjectsPage.astro
+import type { Proyecto } from "../../data/cv";
+
+interface Props {
+  proyectos: Proyecto[];
+  githubUrl?: string;
+}
+
+const { proyectos } = Astro.props;
+
+const proyectoDestacado = proyectos.find((p) => p.esDestacado) || proyectos[0];
+const otrosProyectos = proyectos.filter((p) => !p.esDestacado && !p.esPlaceholder);
+const proyectosEnDesarrollo = proyectos.filter((p) => p.esPlaceholder);
+const totalCompletados = (proyectoDestacado ? 1 : 0) + otrosProyectos.length;
+---
+
+<div id="proyectos">
+  <header class="text-center mb-5 pb-2 border-b-2 border-[#2b241e]">
+    <h2 class="font-headline text-3xl sm:text-4xl font-bold uppercase text-[#1c1714]" data-typewriter data-type-speed="25">
+      Proyectos de Software
+    </h2>
+    <p class="text-xs font-mono text-[#524438] mt-0.5" data-typewriter data-type-speed="16">
+      Sistemas empresariales, arquitecturas distribuidas y aplicaciones móviles
+    </p>
+
+    <!-- BARRA DE FILTROS: ÚNICAMENTE 'TODOS' Y 'EN DESARROLLO' -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mt-3 font-mono text-xs newspaper-fade-item" role="toolbar" aria-label="Filtrar proyectos">
+      <span class="text-[#695442] uppercase font-bold mr-1 text-[11px]">Filtrar:</span>
+      <button
+        type="button"
+        id="btn-filter-todos"
+        class="project-filter-btn px-3 py-1 bg-[#1c1714] text-[#f7efe0] border border-[#1c1714] font-bold rounded-xs cursor-pointer transition-all text-[11px] uppercase tracking-wider"
+        data-filter="todos"
+      >
+        ★ Todos ({totalCompletados})
+      </button>
+      <button
+        type="button"
+        id="btn-filter-desarrollo"
+        class="project-filter-btn px-3 py-1 bg-[#ebd9bd] text-[#2c221a] hover:bg-[#dec7a3] border border-[#4a3a2d]/30 font-bold rounded-xs cursor-pointer transition-all text-[11px] uppercase tracking-wider"
+        data-filter="desarrollo"
+      >
+        En Desarrollo ({proyectosEnDesarrollo.length})
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL DE PROYECTOS -->
+  <div id="projects-container">
+    <!-- VISTA 1: TODOS (PROYECTO DESTACADO + OTROS PROYECTOS) -->
+    <div id="projects-todos-view" class="space-y-5">
+      <!-- 🔴 SECCIÓN 1: PROYECTO DESTACADO -->
+      <div class="newspaper-fade-item">
+        <div class="border-b-2 border-[#8a3324] pb-1 flex items-center justify-between">
+          <h3 class="font-headline text-lg sm:text-xl font-bold uppercase text-[#8a3324] flex items-center gap-1.5">
+            <span>🔴</span>
+            <span>Proyecto Destacado</span>
+          </h3>
+          <span class="text-[10px] font-mono text-[#5c4a3b] font-bold uppercase tracking-wider bg-[#ebd8bb] px-2 py-0.5 border border-[#3d332a]/20">
+            Tesis de Grado • ESFOT — EPN
+          </span>
+        </div>
+      </div>
+
+      {proyectoDestacado && (
+        <article
+          class="project-card newspaper-fade-item p-4 sm:p-5 bg-[#f7f2e4] border-2 border-[#8a3324]/50 shadow-xs"
+        >
+          <div class="flex flex-wrap items-center justify-between border-b border-[#8a3324]/30 pb-1.5 mb-3">
+            <span class="font-mono text-xs uppercase font-bold text-[#8a3324]">
+              {proyectoDestacado.rol}
+            </span>
+            <span class="font-mono text-[11px] text-[#5c4a3b]">
+              REST API • MongoDB • JWT • OWASP Top 10
+            </span>
+          </div>
+
+          <h4 class="font-headline text-xl sm:text-2xl font-bold text-[#1c1714] mb-3">
+            {proyectoDestacado.titulo}
+          </h4>
+
+          <div class="space-y-2 text-xs sm:text-sm text-[#2b241e] leading-relaxed mb-4 text-justify">
+            {proyectoDestacado.puntosClave.map((punto) => (
+              <p set:html={punto} />
+            ))}
+          </div>
+
+          <div class="pt-3 border-t border-[#3d332a]/20 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span class="font-mono text-[10px] uppercase font-bold text-[#5c4a3b] block mb-1.5">
+                Tecnologías:
+              </span>
+              <div class="flex flex-wrap gap-1.5 font-mono text-[11px]">
+                {proyectoDestacado.tecnologias.map((tec) => (
+                  <span class="bg-[#ebd8bb] px-2 py-0.5 border border-[#4a3c30]/25 text-[#2c221a] font-semibold rounded-2xs">
+                    `{tec}`
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {proyectoDestacado.enlaceGithub && (
+              <a
+                href={proyectoDestacado.enlaceGithub}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 text-xs font-mono font-bold bg-[#8a3324] hover:bg-[#a33f2e] text-[#f7efe0] px-3 py-1.5 rounded-xs transition-colors border border-[#541f16] shadow-xs"
+              >
+                <span>Repositorio del proyecto</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </div>
+        </article>
+      )}
+
+      <!-- ★ SECCIÓN 2: OTROS PROYECTOS -->
+      <div class="newspaper-fade-item">
+        <div class="border-b-2 border-[#2b241e] pb-1 flex items-center justify-between">
+          <h3 class="font-headline text-lg sm:text-xl font-bold uppercase text-[#1c1714] flex items-center gap-1.5">
+            <span class="text-[#8a3324]">★</span>
+            <span>Otros Proyectos</span>
+          </h3>
+          <span class="text-[10px] font-mono text-[#5c4a3b] font-bold uppercase tracking-wider">
+            Sistemas Distribuidos & Aplicaciones Móviles
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+        {otrosProyectos.map((proyecto) => (
+          <article
+            class="project-card newspaper-fade-item flex flex-col justify-between p-4 bg-[#f5ecda] border border-[#3d332a]/35 shadow-xs"
+          >
+            <div>
+              <div class="flex flex-wrap items-center justify-between border-b border-[#3d332a]/25 pb-1 mb-2">
+                <span class="font-mono text-xs uppercase font-bold text-[#8a3324]">
+                  {proyecto.tipo}
+                </span>
+                <span class="font-mono text-[10px] text-[#524438]">
+                  {proyecto.tecnologias.slice(0, 3).join(" • ")}
+                </span>
+              </div>
+
+              <h4 class="font-headline text-lg font-bold text-[#1c1714] mb-2">
+                {proyecto.titulo}
+              </h4>
+
+              <div class="space-y-1.5 text-xs text-[#2b241e] leading-relaxed mb-3">
+                {proyecto.puntosClave.map((punto) => (
+                  <p set:html={punto} />
+                ))}
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-[#3d332a]/20 mt-2">
+              <div class="flex flex-wrap gap-1 font-mono text-[10px] mb-2.5">
+                {proyecto.tecnologias.map((tec) => (
+                  <span class="bg-[#ebd8bb] px-1.5 py-0.5 border border-[#4a3c30]/20 text-[#2c221a] font-semibold rounded-2xs">
+                    `{tec}`
+                  </span>
+                ))}
+              </div>
+
+              {proyecto.enlaceGithub && (
+                <a
+                  href={proyecto.enlaceGithub}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 text-xs font-mono font-bold underline hover:text-[#8a3324] transition-colors"
+                >
+                  <span>Repositorio del proyecto</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- VISTA 2: EN DESARROLLO (SOLO APARECE AL SELECCIONAR 'EN DESARROLLO') -->
+    <div id="projects-dev-view" class="space-y-5" style="display: none;">
+      <!-- 🔵 SECCIÓN: PROYECTOS EN DESARROLLO -->
+      <div>
+        <div class="border-b-2 border-[#2b241e] pb-1 flex items-center justify-between">
+          <h3 class="font-headline text-lg sm:text-xl font-bold uppercase text-[#1c1714] flex items-center gap-1.5">
+            <span class="text-[#7a482b]">🔵</span>
+            <span>Proyectos en Desarrollo</span>
+          </h3>
+          <span class="text-[10px] font-mono text-[#5c4a3b] font-bold uppercase tracking-wider">
+            Fase Activa & Próximas Publicaciones
+          </span>
+        </div>
+      </div>
+
+      <div class={proyectosEnDesarrollo.length > 1 ? "grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch" : "space-y-4"}>
+        {proyectosEnDesarrollo.map((proyecto) => (
+          <article
+            class="flex flex-col justify-between p-4 sm:p-5 bg-[#ebdcc2]/40 border-2 border-dashed border-[#4a3c30]/40 shadow-xs"
+          >
+            <div>
+              <div class="flex flex-wrap items-center justify-between border-b border-[#4a3c30]/20 pb-1 mb-2">
+                <span class="font-mono text-xs uppercase font-bold text-[#7a482b]">
+                  🔵 {proyecto.tipo}
+                </span>
+                <span class="font-mono text-[10px] text-[#735d4b] uppercase font-semibold">
+                  {proyecto.enlaceDemo ? "Despliegue Provisional" : "En Actualización"}
+                </span>
+              </div>
+
+              <h4 class="font-headline text-lg sm:text-xl font-bold text-[#1c1714] mb-2">
+                {proyecto.titulo}
+              </h4>
+
+              <div class="space-y-1.5 text-xs text-[#4a3d31] leading-relaxed mb-3">
+                {proyecto.puntosClave.map((punto) => (
+                  <p set:html={punto} />
+                ))}
+              </div>
+            </div>
+
+            <div class="pt-2.5 border-t border-[#4a3c30]/20 mt-2">
+              <div class="flex flex-wrap gap-1 font-mono text-[10px] mb-3">
+                {proyecto.tecnologias.map((tec) => (
+                  <span class="bg-[#ebd8bb] px-2 py-0.5 border border-[#4a3c30]/20 text-[#2c221a] font-semibold rounded-2xs">
+                    `{tec}`
+                  </span>
+                ))}
+              </div>
+
+              <div class="flex flex-wrap items-center gap-3 text-xs font-mono font-bold">
+                {proyecto.enlaceDemo && (
+                  <a
+                    href={proyecto.enlaceDemo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 bg-[#8a3324] hover:bg-[#a33f2e] text-[#f7efe0] px-3 py-1.5 rounded-xs transition-colors shadow-xs"
+                    title="Visitar sitio desplegado (enlace provisional en Render)"
+                  >
+                    <span>Visitar Sitio (Render)</span>
+                    <span aria-hidden="true">🌐→</span>
+                  </a>
+                )}
+
+                {proyecto.enlaceGithub && (
+                  <a
+                    href={proyecto.enlaceGithub}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 text-[#2c221a] hover:text-[#8a3324] underline transition-colors"
+                  >
+                    <span>Repositorio GitHub</span>
+                    <span aria-hidden="true">→</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupProjectFilters() {
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>(".project-filter-btn");
+    const todosView = document.getElementById("projects-todos-view");
+    const devView = document.getElementById("projects-dev-view");
+
+    if (!filterButtons.length || !todosView || !devView) return;
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.getAttribute("data-filter");
+
+        // Estilos de botones
+        filterButtons.forEach((b) => {
+          b.classList.remove("bg-[#1c1714]", "text-[#f7efe0]", "border-[#1c1714]");
+          b.classList.add("bg-[#ebd9bd]", "text-[#2c221a]", "border-[#4a3a2d]/30");
+        });
+        btn.classList.add("bg-[#1c1714]", "text-[#f7efe0]", "border-[#1c1714]");
+        btn.classList.remove("bg-[#ebd9bd]", "text-[#2c221a]");
+
+        // Alternar vistas
+        if (filter === "desarrollo") {
+          todosView.style.display = "none";
+          devView.style.display = "block";
+        } else {
+          todosView.style.display = "block";
+          devView.style.display = "none";
+        }
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupProjectFilters, { once: true });
+  } else {
+    setupProjectFilters();
+  }
+</script>

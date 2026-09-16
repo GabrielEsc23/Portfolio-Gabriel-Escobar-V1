@@ -1,0 +1,19 @@
+---
+// src/components/pages/ContactPage.astro
+import ContactForm from "../ContactForm.astro";
+---
+
+<div id="contacto">
+  <header class="text-center mb-5 pb-2 border-b-2 border-[#2b241e]">
+    <h2 class="font-headline text-3xl sm:text-4xl font-bold uppercase text-[#1c1714]" data-typewriter data-type-speed="25">
+      Contacto Directo
+    </h2>
+    <p class="text-xs font-mono text-[#524438] mt-0.5" data-typewriter data-type-speed="16">
+      Envía un mensaje directo a mi bandeja de entrada mediante este despacho editorial
+    </p>
+  </header>
+
+  <div class="max-w-2xl mx-auto newspaper-fade-item">
+    <ContactForm />
+  </div>
+</div>

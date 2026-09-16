@@ -1,0 +1,129 @@
+---
+// src/components/NewspaperContainer.astro
+---
+
+<div class="newspaper-desk-backdrop min-h-screen py-6 sm:py-10 px-3 sm:px-6 flex justify-center">
+  <main class="newspaper-broadsheet-sheet max-w-5xl w-full relative">
+    <!-- Capas de textura y envejecimiento físico -->
+    <div class="sheet-overlays" aria-hidden="true">
+      <div class="paper-texture"></div>
+      <div class="paper-lighting"></div>
+      <div class="paper-vignette-edges"></div>
+
+      <!-- Marcas de imprenta tradicionales -->
+      <div class="press-marks top-left"><span class="reg-cross">+</span></div>
+      <div class="press-marks top-right"><span class="reg-cross">+</span></div>
+      <div class="press-marks bottom-left"><span class="reg-cross">+</span></div>
+      <div class="press-marks bottom-right">
+        <span class="reg-cross">+</span>
+        <div class="cmyk-patches">
+          <span class="patch patch-c"></span>
+          <span class="patch patch-m"></span>
+          <span class="patch patch-y"></span>
+          <span class="patch patch-k"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido editorial de la página web continua -->
+    <div class="relative z-10 px-4 sm:px-10 md:px-14 py-8 sm:py-12 space-y-12 sm:space-y-16">
+      <slot />
+    </div>
+  </main>
+</div>
+
+<style>
+  /* Fondo del escritorio editorial */
+  .newspaper-desk-backdrop {
+    background-color: #171513;
+    background-image:
+      radial-gradient(ellipse at 50% 20%, rgba(55, 46, 38, 0.6) 0%, rgba(14, 12, 10, 0.98) 90%),
+      repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.012) 0px,
+        rgba(255, 255, 255, 0.012) 2px,
+        transparent 2px,
+        transparent 8px
+      );
+    background-attachment: fixed;
+  }
+
+  /* Pliego de periódico central */
+  .newspaper-broadsheet-sheet {
+    background-color: #f5efe1;
+    background-image: radial-gradient(ellipse at 50% 15%, #f9f5ea 0%, #f2e9d7 100%);
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.35),
+      0 20px 48px -8px rgba(0, 0, 0, 0.6),
+      0 40px 80px -16px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(110, 85, 55, 0.22);
+    border-radius: 2px;
+  }
+
+  /* Texturas de papel */
+  .sheet-overlays {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .paper-texture {
+    position: absolute;
+    inset: 0;
+    background-image: url("/paper-texture.svg");
+    background-repeat: repeat;
+    background-size: 380px 380px;
+    opacity: 0.32;
+    mix-blend-mode: multiply;
+  }
+
+  .paper-lighting {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 20%, rgba(255, 255, 245, 0.25) 0%, transparent 65%);
+    mix-blend-mode: soft-light;
+  }
+
+  .paper-vignette-edges {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, rgba(70, 50, 25, 0.12) 0%, transparent 4%),
+      linear-gradient(to left, rgba(70, 50, 25, 0.12) 0%, transparent 4%),
+      linear-gradient(to bottom, rgba(70, 50, 25, 0.15) 0%, transparent 2%),
+      linear-gradient(to top, rgba(70, 50, 25, 0.18) 0%, transparent 2%);
+    mix-blend-mode: multiply;
+  }
+
+  /* Marcas de imprenta */
+  .press-marks {
+    position: absolute;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: bold;
+    color: rgba(90, 70, 50, 0.35);
+    user-select: none;
+    line-height: 1;
+  }
+
+  .top-left { top: 10px; left: 12px; }
+  .top-right { top: 10px; right: 12px; }
+  .bottom-left { bottom: 10px; left: 12px; }
+  .bottom-right {
+    bottom: 10px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .reg-cross { display: inline-block; opacity: 0.55; }
+  .cmyk-patches { display: inline-flex; gap: 3px; padding-left: 4px; opacity: 0.6; }
+  .patch { width: 6px; height: 6px; border-radius: 50%; }
+  .patch-c { background-color: #0088cc; }
+  .patch-m { background-color: #cc0066; }
+  .patch-y { background-color: #d4a017; }
+  .patch-k { background-color: #333333; }
+</style>

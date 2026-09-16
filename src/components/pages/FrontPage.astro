@@ -1,0 +1,109 @@
+---
+// src/components/pages/FrontPage.astro
+import PhotoFrame from "../PhotoFrame.astro";
+import type { CVData } from "../../data/cv";
+
+interface Props {
+  perfil: CVData["perfil"];
+  ingles?: CVData["ingles"];
+}
+
+const { perfil, ingles } = Astro.props;
+---
+
+<div id="perfil">
+  <!-- CABECERA PRINCIPAL (MASTHEAD) -->
+  <header class="text-center mb-6">
+    <div class="flex flex-wrap items-center justify-between py-1 px-3 text-[11px] uppercase tracking-widest border-y border-[#3d332a]/40 text-[#4a3f35] font-mono mb-2">
+      <span>Gaceta de Ingeniería de Software</span>
+      <span class="font-bold text-[#1f1915]">{perfil.institucion}</span>
+      <span>{perfil.ubicacion}</span>
+    </div>
+
+    <!-- Título principal de prensa -->
+    <h1 class="font-masthead text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-[#1c1714] uppercase my-1 leading-none" data-typewriter data-type-speed="32">
+      {perfil.nombre}
+    </h1>
+
+    <p class="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#5c4736] mt-1.5" data-typewriter data-type-speed="18">
+      ★ {perfil.titulo} ★
+    </p>
+
+    <!-- Enlaces de contacto directo y redes -->
+    <div class="border-newspaper-double mt-3 py-2 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-xs font-mono font-bold uppercase tracking-wider text-[#2d251f] newspaper-fade-item">
+      <a href={perfil.linkedin} target="_blank" rel="noopener noreferrer" class="hover:text-[#8a3324] underline decoration-dotted bg-[#ebd8bb]/60 px-2 py-0.5 border border-[#4a3c30]/25 rounded-xs transition-colors">
+        LinkedIn: linkedin.com/in/gabriel-escobar
+      </a>
+      <a href={perfil.github} target="_blank" rel="noopener noreferrer" class="hover:text-[#8a3324] underline decoration-dotted bg-[#ebd8bb]/60 px-2 py-0.5 border border-[#4a3c30]/25 rounded-xs transition-colors">
+        GitHub: github.com/GabrielEsc23
+      </a>
+      <a href={`mailto:${perfil.email}`} class="hover:text-[#8a3324] underline decoration-dotted px-1.5 py-0.5 transition-colors">
+        {perfil.email}
+      </a>
+      <a href={`tel:${perfil.telefono.replace(/\s+/g, "")}`} class="hover:text-[#8a3324] underline decoration-dotted px-1.5 py-0.5 transition-colors">
+        {perfil.telefono}
+      </a>
+    </div>
+  </header>
+
+  <!-- CUERPO DE LA PORTADA: FOTOGRAFÍA + BIOGRAFÍA EDITORIAL -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+    <div class="md:col-span-4 border-b md:border-b-0 md:border-r border-[#3d332a]/30 pb-4 md:pb-0 md:pr-5 newspaper-fade-item">
+      <PhotoFrame alt={`Fotografía de ${perfil.nombre}`} caption={perfil.nombre} subcaption={`${perfil.titulo} • EPN`} />
+      <div class="bg-[#ebd9bd]/50 p-3 border border-[#3d332a]/35 text-xs mt-3 shadow-2xs font-mono text-[11px] space-y-1">
+        <div><strong>Alma Máter:</strong> EPN</div>
+        <div><strong>Ubicación:</strong> {perfil.ubicacion}</div>
+        <div><strong>Modalidad:</strong> Presencial / Remoto</div>
+        <div><strong>Estado:</strong> Disponible para contratación</div>
+      </div>
+
+      <!-- Credencial Oficial de Idiomas / Inglés -->
+      {ingles && (
+        <div class="bg-[#ecd9bc]/80 p-3 border-2 border-[#8a3324]/40 text-xs mt-3 shadow-2xs font-mono text-[11px] space-y-1">
+          <div class="flex items-center justify-between font-bold text-[#8a3324] uppercase text-[10px] tracking-wider border-b border-[#8a3324]/30 pb-1 mb-1">
+            <span>★ Competencia en Idiomas</span>
+            <span>🌐</span>
+          </div>
+          <div class="text-[#1c1714] font-bold text-xs">{ingles.nivel}</div>
+          <div class="text-[#594738] text-[10px]">{ingles.institucion}</div>
+        </div>
+      )}
+    </div>
+
+    <article class="md:col-span-8">
+      <div class="border-b-2 border-[#2b241e] pb-1.5 mb-3">
+        <h2 class="font-headline text-2xl font-bold text-[#1c1714]" data-typewriter data-type-speed="22">
+          Perfil y Trayectoria Profesional
+        </h2>
+      </div>
+
+      <div class="text-justify text-[#26201b] leading-relaxed text-sm space-y-3 newspaper-fade-item">
+        <p class="first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2.5 first-letter:text-[#1c1714] first-letter:font-masthead first-letter:leading-none">
+          {perfil.bioParrafo1}
+        </p>
+        <p>{perfil.bioParrafo2}</p>
+      </div>
+
+      <!-- Sumario con enlaces a las otras páginas -->
+      <div class="mt-6 pt-3 border-t border-[#3d332a]/30 newspaper-fade-item">
+        <span class="text-xs font-mono uppercase font-bold text-[#4a3e35] block mb-2">
+          Sumario de la Edición:
+        </span>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
+          <button type="button" class="p-2.5 border border-[#3d332a]/30 bg-[#f7f2e5] hover:bg-[#ebd9bd] transition-colors text-left cursor-pointer group" data-newspaper-goto="2">
+            <strong class="text-[#8a3324] block group-hover:underline">PÁGINA 2 →</strong>
+            <span class="text-[#2b241e]">Gaceta de Proyectos</span>
+          </button>
+          <button type="button" class="p-2.5 border border-[#3d332a]/30 bg-[#f7f2e5] hover:bg-[#ebd9bd] transition-colors text-left cursor-pointer group" data-newspaper-goto="3">
+            <strong class="text-[#8a3324] block group-hover:underline">PÁGINA 3 →</strong>
+            <span class="text-[#2b241e]">Habilidades Técnicas</span>
+          </button>
+          <button type="button" class="p-2.5 border border-[#3d332a]/30 bg-[#f7f2e5] hover:bg-[#ebd9bd] transition-colors text-left cursor-pointer group" data-newspaper-goto="4">
+            <strong class="text-[#8a3324] block group-hover:underline">PÁGINA 4 →</strong>
+            <span class="text-[#2b241e]">Contacto & Despacho</span>
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,171 @@
+---
+// src/components/ContactForm.astro
+---
+
+<article class="p-5 sm:p-6 bg-[#f7f2e4] border-2 border-[#2b241e] shadow-xs relative">
+  <!-- Cabecera estilo telegrama -->
+  <div class="border-b-2 border-[#2b241e] pb-2.5 mb-4 flex flex-wrap items-center justify-between gap-2">
+    <div>
+      <span class="font-mono text-[10px] uppercase font-bold text-[#8a3324] tracking-widest block">
+        ★ SERVICIO DE MENSAJERÍA DIRECTA ★
+      </span>
+      <h3 class="font-headline text-lg sm:text-xl font-bold text-[#1c1714]">
+        Formulario de Contacto
+      </h3>
+    </div>
+    <span class="text-[10px] font-mono text-[#5c4a3b] bg-[#ebd9bd] px-2 py-0.5 border border-[#3d332a]/20">
+      Envío Directo a Gmail
+    </span>
+  </div>
+
+  <p class="text-xs text-[#42362b] mb-5 leading-relaxed">
+    Completa el siguiente formulario para comunicarte directamente conmigo. 
+  </p>
+
+  <form id="contact-form" class="space-y-4 font-mono text-xs">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Campo: Nombre -->
+      <div>
+        <label for="nombre" class="block font-bold text-[#2b221a] uppercase tracking-wider mb-1">
+          Remitente / Nombre <span class="text-[#8a3324]">*</span>
+        </label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          required
+          minlength="2"
+          maxlength="100"
+          placeholder="Ej: Lic. Roberto Gómez / Reclutador"
+          class="w-full px-3 py-2 bg-[#fcf9f2] border border-[#3d332a]/40 focus:border-[#8a3324] focus:outline-none focus:ring-1 focus:ring-[#8a3324] text-[#1c1714] placeholder-[#8a7a6b]"
+        />
+      </div>
+
+      <!-- Campo: Correo Electrónico -->
+      <div>
+        <label for="email" class="block font-bold text-[#2b221a] uppercase tracking-wider mb-1">
+          Correo de Contacto <span class="text-[#8a3324]">*</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="tu-correo@empresa.com"
+          class="w-full px-3 py-2 bg-[#fcf9f2] border border-[#3d332a]/40 focus:border-[#8a3324] focus:outline-none focus:ring-1 focus:ring-[#8a3324] text-[#1c1714] placeholder-[#8a7a6b]"
+        />
+      </div>
+    </div>
+
+    <!-- Campo: Asunto -->
+    <div>
+      <label for="asunto" class="block font-bold text-[#2b221a] uppercase tracking-wider mb-1">
+        Asunto / Motivo <span class="text-[#8a3324]">*</span>
+      </label>
+      <input
+        type="text"
+        id="asunto"
+        name="asunto"
+        required
+        maxlength="150"
+        placeholder="Ej: Oferta Laboral / Consulta sobre Proyecto de Software"
+        class="w-full px-3 py-2 bg-[#fcf9f2] border border-[#3d332a]/40 focus:border-[#8a3324] focus:outline-none focus:ring-1 focus:ring-[#8a3324] text-[#1c1714] placeholder-[#8a7a6b]"
+      />
+    </div>
+
+    <!-- Campo: Mensaje -->
+    <div>
+      <label for="mensaje" class="block font-bold text-[#2b221a] uppercase tracking-wider mb-1">
+        Mensaje / Despacho <span class="text-[#8a3324]">*</span>
+      </label>
+      <textarea
+        id="mensaje"
+        name="mensaje"
+        required
+        rows="4"
+        minlength="5"
+        maxlength="3000"
+        placeholder="Escribe los detalles de tu propuesta, consulta o solicitud técnica..."
+        class="w-full px-3 py-2 bg-[#fcf9f2] border border-[#3d332a]/40 focus:border-[#8a3324] focus:outline-none focus:ring-1 focus:ring-[#8a3324] text-[#1c1714] placeholder-[#8a7a6b] leading-relaxed resize-y"
+      ></textarea>
+    </div>
+
+    <!-- Mensaje de Estado / Feedback visual -->
+    <div id="form-status" class="hidden p-3 border text-xs leading-relaxed"></div>
+
+    <!-- Botón de Envío -->
+    <div class="pt-1 flex flex-wrap items-center justify-between gap-3">
+      
+
+      <button
+        type="submit"
+        id="submit-btn"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#8a3324] hover:bg-[#a33f2e] text-[#f7efe0] font-bold uppercase tracking-wider border border-[#541f16] shadow-xs cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <span id="btn-text">ENVIAR</span>
+      </button>
+    </div>
+  </form>
+</article>
+
+<script>
+  function setupContactForm() {
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    const statusBox = document.getElementById("form-status");
+    const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement | null;
+    const btnText = document.getElementById("btn-text");
+
+    if (!form || !statusBox || !submitBtn || !btnText) return;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Deshabilitar botón durante el envío
+      submitBtn.disabled = true;
+      btnText.textContent = "Transmitiendo telegrama...";
+      statusBox.className = "p-3 border text-xs leading-relaxed bg-[#ebd9bd]/80 border-[#3d332a]/40 text-[#2b221a]";
+      statusBox.innerHTML = "⏳ Transmitiendo despacho editorial al servidor de correo...";
+      statusBox.classList.remove("hidden");
+
+      const formData = {
+        nombre: (form.querySelector("#nombre") as HTMLInputElement).value,
+        email: (form.querySelector("#email") as HTMLInputElement).value,
+        asunto: (form.querySelector("#asunto") as HTMLInputElement).value,
+        mensaje: (form.querySelector("#mensaje") as HTMLTextAreaElement).value,
+      };
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          statusBox.className = "p-3 border text-xs leading-relaxed bg-[#e4f0dc] border-[#3f7a26] text-[#1b420e] font-semibold";
+          statusBox.innerHTML = `✓ ${result.message}`;
+          form.reset();
+        } else {
+          statusBox.className = "p-3 border text-xs leading-relaxed bg-[#fae3e1] border-[#a62b1e] text-[#5c130b]";
+          statusBox.innerHTML = `✗ ${result.error || "Ocurrió un inconveniente al transmitir el mensaje."} <br/><span class="text-[11px] font-normal">También puedes escribirme directamente a <a href="mailto:gabrielescobar283@gmail.com" class="underline font-bold">gabrielescobar283@gmail.com</a></span>`;
+        }
+      } catch (error) {
+        statusBox.className = "p-3 border text-xs leading-relaxed bg-[#fae3e1] border-[#a62b1e] text-[#5c130b]";
+        statusBox.innerHTML = `✗ Error de conexión con el servidor. <br/><span class="text-[11px] font-normal">Por favor escríbeme directamente a <a href="mailto:gabrielescobar283@gmail.com" class="underline font-bold">gabrielescobar283@gmail.com</a></span>`;
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = "Transmitir Despacho ✉️";
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupContactForm, { once: true });
+  } else {
+    setupContactForm();
+  }
+</script>

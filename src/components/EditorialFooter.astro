@@ -1,0 +1,50 @@
+---
+// src/components/EditorialFooter.astro
+import { cvData } from "../data/cv";
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="mt-16 pt-8 border-t-2 border-[#2e261f] text-[#4a3e35] font-mono text-xs">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center pb-8 border-b border-[#3d332a]/30">
+    <!-- Columna 1: Edición y Colofón -->
+    <div>
+      <span class="font-bold uppercase tracking-widest text-[#1c1714] block mb-1">The Developer Gazette</span>
+      <p class="text-[11px] leading-relaxed text-[#5c4a3b]">
+        Publicación técnica independiente • Quito, Ecuador<br />
+        Edición Especial de Portafolio Profesional {currentYear}
+      </p>
+    </div>
+
+    <!-- Columna 2: Navegación rápida -->
+    <div class="text-center">
+      <span class="font-bold uppercase tracking-wider text-[#1c1714] block mb-1.5">Secciones</span>
+      <div class="flex flex-wrap justify-center gap-3 text-[11px]">
+        <a href="#perfil" class="hover:text-[#8a3324] hover:underline">Portada</a>
+        <span>•</span>
+        <a href="#proyectos" class="hover:text-[#8a3324] hover:underline">Proyectos</a>
+        <span>•</span>
+        <a href="#habilidades" class="hover:text-[#8a3324] hover:underline">Habilidades</a>
+        <span>•</span>
+        <a href="#contacto" class="hover:text-[#8a3324] hover:underline">Contacto & CV</a>
+      </div>
+    </div>
+
+    <!-- Columna 3: Retorno al inicio -->
+    <div class="text-right flex flex-col items-end">
+      <a
+        href="#perfil"
+        id="back-to-top-btn"
+        class="inline-flex items-center gap-1 px-3 py-1.5 bg-[#ebd9bd] hover:bg-[#dec8a7] text-[#2b221a] font-bold border border-[#4a3a2d]/30 transition-colors uppercase tracking-wider text-[11px] rounded-xs shadow-2xs cursor-pointer"
+      >
+        <span>↑ Volver al Titular</span>
+      </a>
+      <span class="text-[10px] text-[#786452] mt-1">Impreso con Astro & Tailwind</span>
+    </div>
+  </div>
+
+  <div class="pt-4 flex flex-wrap items-center justify-between text-[11px] text-[#786452]">
+    <span>© {currentYear} {cvData.perfil.nombre}. Todos los derechos editoriales reservados.</span>
+    <span>Escuela Politécnica Nacional (EPN)</span>
+  </div>
+</footer>

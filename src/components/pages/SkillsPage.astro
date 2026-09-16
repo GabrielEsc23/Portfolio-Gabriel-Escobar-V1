@@ -1,0 +1,142 @@
+---
+// src/components/pages/SkillsPage.astro
+import type { CVData } from "../../data/cv";
+
+interface Props {
+  habilidades: CVData["habilidades"];
+}
+
+const { habilidades } = Astro.props;
+---
+
+<div id="habilidades">
+  <header class="text-center mb-5 pb-2 border-b-2 border-[#2b241e]">
+    <h2 class="font-headline text-3xl sm:text-4xl font-bold uppercase text-[#1c1714]" data-typewriter data-type-speed="25">
+      Habilidades Técnicas
+    </h2>
+    <p class="text-xs font-mono text-[#524438] mt-0.5" data-typewriter data-type-speed="16">
+      Competencias tecnológicas, lenguajes de programación, frameworks y herramientas de desarrollo
+    </p>
+  </header>
+
+  <!-- CUADRÍCULA EDITORIAL DE HABILIDADES A ANCHO COMPLETO -->
+  <div class="space-y-4">
+    <div class="border-b-2 border-[#2b241e] pb-1 flex items-center justify-between newspaper-fade-item">
+      <h3 class="font-headline text-lg font-bold uppercase text-[#1c1714]">
+        Stack Tecnológico & Competencias Clave
+      </h3>
+      <span class="text-[10px] font-mono text-[#8a3324] font-bold uppercase">Clasificación Editorial Especializada</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
+      <!-- 1. Lenguajes -->
+      <div class="p-3.5 border border-[#3d332a]/30 bg-[#f7f2e4] shadow-2xs newspaper-fade-item">
+        <div class="flex items-center justify-between border-b border-[#3d332a]/20 pb-1 mb-2">
+          <strong class="font-mono uppercase text-[#8a3324] font-bold text-xs">
+            Lenguajes
+          </strong>
+          <span class="text-[10px] font-mono text-[#614e3e]">Sintaxis & Core</span>
+        </div>
+        <ul class="space-y-1.5 text-[#2b241e] font-mono text-[11px]">
+          {habilidades.lenguajes.map((item) => (
+            <li class="flex items-center gap-1.5">
+              <span class="text-[#8a3324] font-bold">▪</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 2. Frontend & Móvil -->
+      <div class="p-3.5 border border-[#3d332a]/30 bg-[#f7f2e4] shadow-2xs newspaper-fade-item">
+        <div class="flex items-center justify-between border-b border-[#3d332a]/20 pb-1 mb-2">
+          <strong class="font-mono uppercase text-[#8a3324] font-bold text-xs">
+            Frontend & Móvil
+          </strong>
+          <span class="text-[10px] font-mono text-[#614e3e]">UI / UX Apps</span>
+        </div>
+        <ul class="space-y-1.5 text-[#2b241e] font-mono text-[11px]">
+          {habilidades.frontend.map((item) => (
+            <li class="flex items-center gap-1.5">
+              <span class="text-[#8a3324] font-bold">▪</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 3. Backend & APIs -->
+      <div class="p-3.5 border border-[#3d332a]/30 bg-[#f7f2e4] shadow-2xs newspaper-fade-item">
+        <div class="flex items-center justify-between border-b border-[#3d332a]/20 pb-1 mb-2">
+          <strong class="font-mono uppercase text-[#8a3324] font-bold text-xs">
+            Backend & APIs
+          </strong>
+          <span class="text-[10px] font-mono text-[#614e3e]">Servicios Web</span>
+        </div>
+        <ul class="space-y-1.5 text-[#2b241e] font-mono text-[11px]">
+          {habilidades.backend.map((item) => (
+            <li class="flex items-center gap-1.5">
+              <span class="text-[#8a3324] font-bold">▪</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 4. Bases de Datos -->
+      <div class="p-3.5 border border-[#3d332a]/30 bg-[#f7f2e4] shadow-2xs newspaper-fade-item">
+        <div class="flex items-center justify-between border-b border-[#3d332a]/20 pb-1 mb-2">
+          <strong class="font-mono uppercase text-[#8a3324] font-bold text-xs">
+            Bases de Datos
+          </strong>
+          <span class="text-[10px] font-mono text-[#614e3e]">SQL & NoSQL</span>
+        </div>
+        <ul class="space-y-1.5 text-[#2b241e] font-mono text-[11px]">
+          {habilidades.basesDeDatos.map((item) => (
+            <li class="flex items-center gap-1.5">
+              <span class="text-[#8a3324] font-bold">▪</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 5. DevOps, Servidores & Contenedores -->
+      <div class="p-3.5 border border-[#3d332a]/30 bg-[#f7f2e4] shadow-2xs newspaper-fade-item">
+        <div class="flex items-center justify-between border-b border-[#3d332a]/20 pb-1 mb-2">
+          <strong class="font-mono uppercase text-[#8a3324] font-bold text-xs">
+            Arquitectura & DevOps
+          </strong>
+          <span class="text-[10px] font-mono text-[#614e3e]">Infraestructura</span>
+        </div>
+        <ul class="space-y-1.5 text-[#2b241e] font-mono text-[11px]">
+          <li class="flex items-center gap-1.5"><span class="text-[#8a3324] font-bold">▪</span> Docker & Docker Compose</li>
+          <li class="flex items-center gap-1.5"><span class="text-[#8a3324] font-bold">▪</span> NGINX (Proxy & Load Balancer)</li>
+          <li class="flex items-center gap-1.5"><span class="text-[#8a3324] font-bold">▪</span> Linux & Ambientes Distribuidos</li>
+        </ul>
+      </div>
+
+      <!-- 6. Seguridad & Herramientas -->
+      <div class="p-3.5 border border-[#3d332a]/30 bg-[#f7f2e4] shadow-2xs newspaper-fade-item">
+        <div class="flex items-center justify-between border-b border-[#3d332a]/20 pb-1 mb-2">
+          <strong class="font-mono uppercase text-[#8a3324] font-bold text-xs">
+            Seguridad & Herramientas
+          </strong>
+          <span class="text-[10px] font-mono text-[#614e3e]">Auditoría & Control</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 text-xs text-[#2b241e] font-mono">
+          {habilidades.herramientas.map((item) => (
+            <span class="bg-[#ebd8bb] px-2 py-0.5 border border-[#3d332a]/20 rounded-xs font-semibold text-[11px]">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTA EDITORIAL DE FONDO -->
+    <div class="p-3 border-2 border-dashed border-[#4a3c30]/35 bg-[#ebd9bd]/40 text-center font-mono text-xs text-[#3d3126] newspaper-fade-item mt-3">
+      <span>★ Énfasis profesional en <strong>arquitectura distribuida, seguridad basada en OWASP Top 10</strong> y desarrollo full-stack con microservicios.</span>
+    </div>
+  </div>
+</div>
