@@ -131,6 +131,13 @@ importers:
       '@types/nodemailer':
         specifier: ^8.0.1
         version: 8.0.1
+    optionalDependencies:
+      '@img/sharp-linux-arm64':
+        specifier: ^0.35.4
+        version: 0.35.4
+      '@img/sharp-linux-x64':
+        specifier: ^0.35.4
+        version: 0.35.4
 
 packages:
 

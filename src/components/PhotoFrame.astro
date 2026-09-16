@@ -36,19 +36,31 @@ const resolvedImage = image || autoFoundImage;
 <figure class="newspaper-photo-frame">
   <div class="photo-inner-border">
     {resolvedImage ? (
-      <Image
-        src={resolvedImage}
-        alt={alt}
-        width={320}
-        height={384}
-        widths={[300, 320, 480, 640]}
-        sizes="(max-width: 640px) 300px, 320px"
-        format="webp"
-        quality={75}
-        class="vintage-photo"
-        loading="eager"
-        fetchpriority="high"
-      />
+      typeof resolvedImage === "string" ? (
+        <img
+          src={resolvedImage}
+          alt={alt}
+          width={320}
+          height={384}
+          class="vintage-photo"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : (
+        <Image
+          src={resolvedImage}
+          alt={alt}
+          width={320}
+          height={384}
+          widths={[300, 320, 480, 640]}
+          sizes="(max-width: 640px) 300px, 320px"
+          format="webp"
+          quality={80}
+          class="vintage-photo"
+          loading="eager"
+          fetchpriority="high"
+        />
+      )
     ) : (
       <div class="photo-placeholder">
         <svg class="w-16 h-16 text-[#6e5842] opacity-70 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
